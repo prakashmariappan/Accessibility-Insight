@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Accessibility Insights</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("levelA").checked = true;
+        fetchExcelData();
+      });
+
+      function fetchExcelData() {
+        fetch("usdata.xlsx")
+          .then((response) => response.arrayBuffer())
+          .then((data) => {
+            const workbook = XLSX.read(new Uint8Array(data), { type: "array" });
+            displayTable(workbook);
+          })
+          .catch((error) => console.error("Error fetching Excel data:", error));
+      }
+
+      function displayTable(workbook) {
+    const levelA = document.getElementById("levelA").checked;
+    const sheetIndex = levelA ? 2 : 3;
+    const worksheet = workbook.Sheets[workbook.SheetNames[sheetIndex]];
+    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+    populateTable(jsonData);
+}
+
+      function populateTable(data) {
+        const tableBody = document.getElementById("tableBody");
+        tableBody.innerHTML = "";
+
+        data.slice(1).forEach((row, index) => {
+          const tr = document.createElement("tr");
+          tr.classList.add("table-row");
+
+          row.forEach((cell, cellIndex) => {
+            const td = document.createElement("td");
+            td.classList.add("table-column");
+
+            if (cellIndex === 0) {
+              // Website column
+              const a = document.createElement("a");
+              a.href = cell;
+              a.classList.add("site-link");
+              a.innerText = cell.replace(/^https?:\/\//, "");
+              a.target = "_blank";
+              td.appendChild(a);
+            } else {
+              td.innerText = cell;
+            }
+
+            tr.appendChild(td);
+          });
+
+          tableBody.appendChild(tr);
+        });
+      }
+
+      function sortTable() {
+    const selectBox = document.getElementById('sortOrder');
+    const sortOrder = selectBox.value;
+    const tableBody = document.getElementById('tableBody');
+    const rowsArray = Array.from(tableBody.rows);
+
+    rowsArray.sort((rowA, rowB) => {
+        const cellA = parseInt(rowA.cells[1].innerText, 10);
+        const cellB = parseInt(rowB.cells[1].innerText, 10);
+        return sortOrder === 'ascending' ? cellA - cellB : cellB - cellA;
+    });
+
+    tableBody.innerHTML = '';
+    rowsArray.forEach(row => tableBody.appendChild(row));
+}
+    </script>
+  </head>
+  <body>
+    <div class="main-container">
+      <div class="layout-container">
+        <header class="header">
+          <a class="logo" href="./index.html">
+            <div class="logo-icon"></div>
+            <h2 class="site-title">Accessibility Insights</h2>
+          </a>
+          <nav class="nav-links">
+            <a href="./list.html">Top 10 sites</a>
+            <a href="./commonerrors.html">Most Common Errors</a>
+            <a href="./Waverrors.html">Wave Tool Errors</a>
+            <a href="./ACheckererrors.html">AChecker Tool Errors</a>
+            <a href="#">About</a>
+          </nav>
+        </header>
+        <div class="main-content" id="landingpage">
+          <div class="body-container">
+            <div class="heading-section">
+              <div class="con-text">
+                <h1 class="intro-title">List of AChecker Validated Websites</h1>
+                <p class="intro-subtitle">
+                  Showing results of average known AChecker errors according to
+                  WCAG 2.0—POUR principles per educational institution,
+                  including their college websites.<br /><br />The error rate
+                  percentage and performance level are categorized as follows:<br />
+                  high (0–33.3%), medium (33.4–66.6%) and low (66.7–100.0%)
+                  Perceivable, Operable, Understandable, Robust.
+                </p>
+              </div>
+            </div>
+            <div class="radio-filter">
+                Select the Type of Level:
+                <label>
+                    <input
+                        type="radio"
+                        name="level"
+                        id="levelA"
+                        onclick="fetchExcelData()"
+                    />
+                    Level A Errors
+                </label>
+                <label>
+                    <input
+                        type="radio"
+                        name="level"
+                        id="levelAA"
+                        onclick="fetchExcelData()"
+                    />
+                    Level AA Errors
+                </label>
+            </div>
+            <div class="filter-container">
+              <div class="select-filter">
+                <label for="sortOrder">Apply Filters:</label>
+                <select id="sortOrder">
+                  <option value="" disabled selected>Select Filter</option>
+                  <option value="ascending">Top Ranking</option>
+                  <option value="descending">Low Ranking</option>
+                </select>
+              </div>
+              <button class="filter-btn" onclick="sortTable()">Filter</button>
+            </div>
+            <div class="table-container">
+              <table class="table">
+                <thead>
+                  <tr class="table-header">
+                    <th class="table-column">Website</th>
+                    <th class="table-column">Ranking</th>
+                    <th class="table-column">Perceivable</th>
+                    <th class="table-column">Operable</th>
+                    <th class="table-column">Understandable</th>
+                    <th class="table-column">Robust</th>
+                    <th class="table-column">Error %</th>
+                    <th class="table-column">Performance</th>
+                  </tr>
+                </thead>
+                <tbody id="tableBody">
+                  <!-- Rows will be inserted here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="footer">
+        <div class="footer-column">
+          <nav class="footer-nav-links">
+            <h2 class="contact-title">Pages</h2>
+            <a href="./list.html">Top 10 sites</a>
+            <a href="./commonerrors.html">Most Common Errors</a>
+            <a href="./Waverrors.html">Wave Tool Errors</a>
+            <a href="#landingpage">AChecker Tool Errors</a>
+            <a href="#">About</a>
+          </nav>
+          <nav class="contact-links">
+            <h2 class="contact-title">Contact</h2>
+            <a href="mailto:info@example.com">info@example.com</a>
+            <a href="tel:+1234567890">+1 234 567 890</a>
+            <a href="https://twitter.com/example" target="_blank">Twitter</a>
+            <a href="https://linkedin.com/in/example" target="_blank"
+              >LinkedIn</a
+            >
+          </nav>
+        </div>
+        <div class="creator-con">
+          <a class="footer-title" href="index.html">Accessibility Insights</a>
+          <a class="creator-name">Developed by Prakash Mariappan</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

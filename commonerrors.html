@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700">
+    <link rel="stylesheet" href="styles.css">
+    <title>Accessibility Insights</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,">
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="main-container">
+        <div class="layout-container">
+          <header class="header">
+            <a class="logo" href="./index.html">
+              <div class="logo-icon">
+              </div>
+              <h2 class="site-title">Accessibility Insights</h2>
+            </a>
+            <nav class="nav-links">
+              <a href="./list.html">Top 10 sites</a>
+              <a href="./commonerrors.html">Most Common Errors</a>
+              <a href="./Waverrors.html">Wave Tool Errors</a>
+              <a href="./ACheckererrors.html">AChecker Tool Errors</a>
+              <a href="#">About</a>
+            </nav>
+          </header>
+            <div class="main-content" id="landingpage">
+                <div class="body-container">
+                    <div class="heading-section">
+                        <div class="con-text">
+                            <h1 class="intro-title">Most Common Accessibility Errors</h1>
+                            <p class="intro-subtitle">Common errors on the web, and how to fix them</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                    <h2 class="section-title">Missing alt text</h2>
+                    <p class="section-text">
+                        When an image is inserted into a website, it's important to include a brief description of the image in the alt text. This helps people with visual impairments understand what the image is about. If the alt text is missing, or if the image is purely decorative and doesn't add any value to the content, it should be given an empty alt attribute.
+                    </p>
+                  </div>
+                  <div class="card">
+                    <h2 class="section-title">Low contrast text</h2>
+                    <p class="section-text">
+                        Text that doesn't have sufficient contrast with its background can be hard to read, especially for people with visual impairments or color vision deficiencies. To improve readability, ensure that the text color and background color have a contrast ratio of at least 4.5:1 for normal text and 3:1 for large text. There are many tools available that can help you check the contrast ratio of your text and background colors.
+                    </p>
+                  </div>
+                  <div class="card">
+                    <h2 class="section-title">Inaccessible forms</h2>
+                    <p class="section-text">
+                        Forms that are not properly labeled or that don't provide clear instructions can be difficult to use for people with disabilities. To make your forms more accessible, ensure that each form field has a visible label, provide helpful error messages when a field is filled out incorrectly, and use HTML attributes like required and placeholder to provide additional context to users.
+                    </p>
+                  </div>
+                  <div class="card">
+                    <h2 class="section-title">Unstructured content</h2>
+                    <p class="section-text">
+                        Content that is not organized or structured in a logical way can be challenging for people who use screen readers or other assistive technologies. To improve the accessibility of your content, use proper heading tags (h1-h6) to create a clear hierarchy, group related elements using lists or tables, and provide descriptive link text and buttons.
+                    </p>
+                  </div>
+                  <div class="card">
+                    <h2 class="section-title">Inaccessible media</h2>
+                    <p class="section-text">
+                        Videos, audio files, and other multimedia content that does not have captions or transcripts can be inaccessible to people with hearing impairments. To make your media more accessible, provide captions for videos, transcripts for audio files, and ensure that any interactive elements (like video controls) are keyboard accessible. You can also use HTML5 media elements to provide multiple sources for your media, allowing users to choose the format that works best for them.
+                    </p>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <footer class="footer">
+        
+          <div class="footer-column">
+            
+            <nav class="footer-nav-links">
+              <h2 class="contact-title">Pages</h2>
+              <a href="./list.html">Top 10 sites</a>
+              <a href="#landingpage">Most Common Errors</a>
+              <a href="./Waverrors.html">Wave Tool Errors</a>
+              <a href="./ACheckererrors.html">AChecker Tool Errors</a>
+              <a href="#">About</a>
+            </nav>
+            
+            <nav class="contact-links">
+              <h2 class="contact-title">Contact</h2>
+              <a href="mailto:info@example.com">info@example.com</a>
+              <a href="tel:+1234567890">+1 234 567 890</a>
+              <a href="https://twitter.com/example" target="_blank">Twitter</a>
+              <a href="https://linkedin.com/in/example" target="_blank">LinkedIn</a>
+            </nav>
+          </div>
+          <div class="creator-con">
+          <a class="footer-title" href="index.html">Accessibility Insights</a>
+          <a class="creator-name">Developed by Prakash Mariappan</a>
+        </div>
+        </footer>
+    </div>
+</body>
+</html>
