@@ -286,11 +286,19 @@ body {
 }
 
 .section-title {
-    color: #201a09;
+  margin: 0% auto;
+  color: #201A09;
     font-size: 1.375rem;
     font-weight: bold;
+background-color: #80c9ff;
+width: 100%;
+text-align: center;
+padding: 1rem 0rem;
+border-bottom: 1px solid #201A09;
+border-collapse: collapse;
 }
 .section-title:hover {
+  color: #201A09;
     cursor: pointer;
     text-decoration: underline;
 }
@@ -298,19 +306,24 @@ body {
 .section-text {
     color: #201a09;
     font-weight: normal;
-    margin: 0px;
+    display: flex;
+  align-items:flex-start;
+  flex-direction: column;
+  margin: 1.5% auto;
+  width: 96%;
+}
+.section-text div{
+  margin: .5rem; 
 }
 
 .card {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items:flex-start;
-    padding: 1rem;
-    margin: 1rem auto;
+    align-items: center;
     background-color: #fff;
-    border-radius: 0.75rem;
-    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    margin: 0px;
+    border: 1px solid #201A09;
   }
 
 /*List page styling*/
@@ -419,12 +432,11 @@ margin-left: 2.5%;
 .table-container {
     width: 100%;
     margin: 1rem auto;
-    border-radius: 0.75rem;
-    border: 1px solid #80c9ff;
 }
 .table {
     width: 100%;
     border-collapse: collapse;
+    
 }
 .table-header {
     background-color: #80c9ff;  
@@ -432,19 +444,14 @@ margin-left: 2.5%;
 .table-header th{
     font-weight: bold;
 }
-.table-header :nth-child(1){
-    border-top-left-radius: 11px;
-}
-.table-header :nth-last-child(1){
-    border-top-right-radius: 11px;
-}
 .table-column {
     padding: 16px;
     color: #201A09;
     font-size: 14px;
+    border: 1px solid #201A09;
 }
-.table-row {
-    border-top: 1px solid #80c9ff;
+.main-col{
+  margin: auto;
 }
 .site-link{
     color: #201A09;

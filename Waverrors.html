@@ -60,26 +60,42 @@
         }
 
         function sortTable() {
-            const selectBox = document.getElementById('sortOrder');
-            const sortOrder = selectBox.value;
-            const table = document.querySelector('.table');
-            const rowsArray = Array.from(table.rows).slice(1); // Exclude header row
-            rowsArray.sort((rowA, rowB) => {
-                const cellA = rowA.cells[1].innerText;
-                const cellB = rowB.cells[1].innerText;
-                const valueA = parseInt(cellA, 10);
-                const valueB = parseInt(cellB, 10);
-                if (sortOrder === 'ascending') {
-                    return valueA - valueB;
-                } else {
-                    return valueB - valueA;
-                }
-            });
-
-            const tableBody = document.getElementById('tableBody');
-            tableBody.innerHTML = '';
-            rowsArray.forEach(row => tableBody.appendChild(row));
+    const selectBox = document.getElementById('sortOrder');
+    const sortOrder = selectBox.value;
+    const table = document.querySelector('.table');
+    const rowsArray = Array.from(table.rows).slice(1); // Exclude header row
+    
+    const [column, order] = sortOrder.split('-');
+    
+    const columnIndex = {
+        'errors': 1,
+        'alerts': 2,
+        'features': 3,
+        'structural': 4,
+        'aria': 5,
+        'contrast': 6,
+        'html': 7,
+        'css': 8
+    }[column];
+    
+    rowsArray.sort((rowA, rowB) => {
+        const cellA = rowA.cells[columnIndex].innerText;
+        const cellB = rowB.cells[columnIndex].innerText;
+        const valueA = parseInt(cellA, 10);
+        const valueB = parseInt(cellB, 10);
+        
+        if (order === 'asc') {
+            return valueA - valueB;
+        } else {
+            return valueB - valueA;
         }
+    });
+
+    const tableBody = document.getElementById('tableBody');
+    tableBody.innerHTML = '';
+    rowsArray.forEach(row => tableBody.appendChild(row));
+}
+
 
     </script>
 </head>
@@ -94,6 +110,7 @@
                 <nav class="nav-links">
                     <a href="./list.html">Top 10 sites</a>
                     <a href="./commonerrors.html">Most Common Errors</a>
+                    <a href="./levelbasederrors.html">Level Based Errors</a>
                     <a href="./Waverrors.html">Wave Tool Errors</a>
                     <a href="./ACheckererrors.html">AChecker Tool Errors</a>
                     <a href="#">About</a>
@@ -109,12 +126,27 @@
                     </div>
                     <div class="filter-container">
                       <div class="select-filter">
-                      <label for="sortOrder">Apply Filters:</label>
-                      <select id="sortOrder">
-                        <option value="" disabled selected>Select Filter</option>
-                          <option value="ascending">Low to High Errors</option>
-                          <option value="descending">High to Low Errors</option>
-                      </select>
+                        <label for="sortOrder">Apply Filters:</label>
+                        <select id="sortOrder">
+                            <option value="" disabled selected>Select Filter</option>
+                            <option value="errors-asc">Errors (Low to High)</option>
+                            <option value="errors-desc">Errors (High to Low)</option>
+                            <option value="alerts-asc">Alerts (Low to High)</option>
+                            <option value="alerts-desc">Alerts (High to Low)</option>
+                            <option value="features-asc">Features (Low to High)</option>
+                            <option value="features-desc">Features (High to Low)</option>
+                            <option value="structural-asc">Structural Elements (Low to High)</option>
+                            <option value="structural-desc">Structural Elements (High to Low)</option>
+                            <option value="aria-asc">HTML5 ARIA (Low to High)</option>
+                            <option value="aria-desc">HTML5 ARIA (High to Low)</option>
+                            <option value="contrast-asc">Contrast Errors (Low to High)</option>
+                            <option value="contrast-desc">Contrast Errors (High to Low)</option>
+                            <option value="html-asc">HTML Validation (Low to High)</option>
+                            <option value="html-desc">HTML Validation (High to Low)</option>
+                            <option value="css-asc">CSS Validation (Low to High)</option>
+                            <option value="css-desc">CSS Validation (High to Low)</option>
+                        </select>
+                        
                     </div>
                       <button class="filter-btn" onclick="sortTable()">Filter</button>
                   </div>
@@ -147,6 +179,7 @@
                     <h2 class="contact-title">Pages</h2>
                     <a href="./list.html">Top 10 sites</a>
                     <a href="./commonerrors.html">Most Common Errors</a>
+                    <a href="./levelbasederrors.html">Level Based Errors</a>
                     <a href="#landingpage">Wave Tool Errors</a>
                     <a href="./ACheckererrors.html">AChecker Tool Errors</a>
                     <a href="#">About</a>

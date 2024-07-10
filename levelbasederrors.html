@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700">
+    <link rel="stylesheet" href="styles.css">
+    <title>Accessibility Insights</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,">
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchExcelData();
+        });
+
+        function fetchExcelData() {
+            fetch('usdata.xlsx')
+                .then(response => response.arrayBuffer())
+                .then(data => {
+                    const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[1];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                    populateTable(jsonData);
+                })
+                .catch(error => console.error('Error fetching Excel data:', error));
+        }
+
+        function populateTable(data) {
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+
+            data.slice(1).forEach((row, index) => {
+                const tr = document.createElement('tr');
+                tr.classList.add('table-row');
+
+                row.forEach((cell, cellIndex) => {
+                    const td = document.createElement('td');
+                    td.classList.add('table-column');
+
+                    if (cellIndex === 0) { // Website column
+                        const a = document.createElement('a');
+                        a.href = cell;
+                        a.classList.add('site-link'); // Add class site-link
+                        a.innerText = cell.replace(/^https?:\/\//, '');
+                        a.target = '_blank'; // Opens the link in a new tab
+                        td.appendChild(a);
+                    } else {
+                        td.innerText = cell;
+                    }
+
+                    tr.appendChild(td);
+                });
+
+                tableBody.appendChild(tr);
+            });
+        }
+
+        function applyFilterOrSort() {
+            const selectBox = document.getElementById('filterSortOrder');
+            const selectedValue = selectBox.value;
+
+            if (selectedValue === 'pass' || selectedValue === 'fail') {
+                filterTable(selectedValue);
+            } else {
+                sortTable(selectedValue);
+            }
+        }
+
+        function filterTable(filterValue) {
+            const table = document.querySelector('.table');
+            const rowsArray = Array.from(table.rows).slice(2); // Exclude header rows
+
+            rowsArray.forEach(row => {
+                const resultCell = row.cells[1].innerText;
+                if (filterValue === 'all' || resultCell.toLowerCase() === filterValue.toLowerCase()) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function sortTable(sortOrder) {
+            const table = document.querySelector('.table');
+            const rowsArray = Array.from(table.rows).slice(2); // Exclude header rows
+
+            const columnMap = {
+                'knownAAsc': 2,
+                'knownADesc': 2,
+                'knownAAAsc': 3,
+                'knownAADesc': 3,
+                'knownAAAAsc': 4,
+                'knownAAADesc': 4,
+                'likelyAAsc': 5,
+                'likelyADesc': 5,
+                'likelyAAAsc': 6,
+                'likelyAADesc': 6,
+                'likelyAAAAsc': 7,
+                'likelyAAADesc': 7,
+                'potentialAAsc': 8,
+                'potentialADesc': 8,
+                'potentialAAAsc': 9,
+                'potentialAADesc': 9,
+                'potentialAAAAsc': 10,
+                'potentialAAADesc': 10,
+                'totalValidatorAAsc': 11,
+                'totalValidatorADesc': 11,
+                'totalValidatorAAAsc': 12,
+                'totalValidatorAADesc': 12,
+                'totalValidatorAAAAsc': 13,
+                'totalValidatorAAADesc': 13
+            };
+
+            const columnIndex = columnMap[sortOrder];
+
+            rowsArray.sort((rowA, rowB) => {
+                const cellA = rowA.cells[columnIndex];
+                const cellB = rowB.cells[columnIndex];
+
+                const valueA = cellA ? parseInt(cellA.innerText, 10) : 0;
+                const valueB = cellB ? parseInt(cellB.innerText, 10) : 0;
+
+                if (sortOrder.includes('Asc')) {
+                    return valueA - valueB;
+                } else {
+                    return valueB - valueA;
+                }
+            });
+
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+            rowsArray.forEach(row => tableBody.appendChild(row));
+        }
+
+    </script>
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="layout-container">
+            <header class="header">
+                <a class="logo" href="./index.html">
+                    <div class="logo-icon"></div>
+                    <h2 class="site-title">Accessibility Insights</h2>
+                </a>
+                <nav class="nav-links">
+                    <a href="./list.html">Top 10 sites</a>
+                    <a href="./commonerrors.html">Most Common Errors</a>
+                    <a href="./levelbasederrors.html">Level Based Errors</a>
+                    <a href="./Waverrors.html">Wave Tool Errors</a>
+                    <a href="./ACheckererrors.html">AChecker Tool Errors</a>
+                    <a href="#">About</a>
+                </nav>
+            </header>
+            <div class="main-content" id="landingpage">
+                <div class="body-container">
+                    <div class="heading-section">
+                        <div class="con-text">
+                            <h1 class="intro-title">List of Level based errors</h1>
+                            <p class="intro-subtitle">Showing results of AChecker and Total Validator webpage evaluation
+                                for all levels A, AA and AAA.</p>
+                        </div>
+                    </div>
+                    <div class="filter-container">
+                        <div class="select-filter">
+                            <label for="filterSortOrder">Apply Filters:</label>
+                            <select id="filterSortOrder">
+                                <option value="" disabled selected>Select Filter</option>
+                                <option value="pass">Pass</option>
+                                <option value="fail">Fail</option>
+                                <option value="knownAAsc">Known A (Low to High)</option>
+                                <option value="knownADesc">Known A (High to Low)</option>
+                                <option value="knownAAAsc">Known AA (Low to High)</option>
+                                <option value="knownAADesc">Known AA (High to Low)</option>
+                                <option value="knownAAAAsc">Known AAA (Low to High)</option>
+                                <option value="knownAAADesc">Known AAA (High to Low)</option>
+                                <option value="likelyAAsc">Likely A (Low to High)</option>
+                                <option value="likelyADesc">Likely A (High to Low)</option>
+                                <option value="likelyAAAsc">Likely AA (Low to High)</option>
+                                <option value="likelyAADesc">Likely AA (High to Low)</option>
+                                <option value="likelyAAAAsc">Likely AAA (Low to High)</option>
+                                <option value="likelyAAADesc">Likely AAA (High to Low)</option>
+                                <option value="potentialAAsc">Potential A (Low to High)</option>
+                                <option value="potentialADesc">Potential A (High to Low)</option>
+                                <option value="potentialAAAsc">Potential AA (Low to High)</option>
+                                <option value="potentialAADesc">Potential AA (High to Low)</option>
+                                <option value="potentialAAAAsc">Potential AAA (Low to High)</option>
+                                <option value="potentialAAADesc">Potential AAA (High to Low)</option>
+                                <option value="totalValidatorAAsc">Total Validator A (Low to High)</option>
+                                <option value="totalValidatorADesc">Total Validator A (High to Low)</option>
+                                <option value="totalValidatorAAAsc">Total Validator AA (Low to High)</option>
+                                <option value="totalValidatorAADesc">Total Validator AA (High to Low)</option>
+                                <option value="totalValidatorAAAAsc">Total Validator AAA (Low to High)</option>
+                                <option value="totalValidatorAAADesc">Total Validator AAA (High to Low)</option>
+                            </select>
+                        </div>
+                        <button class="filter-btn" onclick="applyFilterOrSort()">Filter</button>
+                    </div>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr class="table-header">
+                                    <th class="table-column" rowspan="2">Website</th>
+                                    <th class="table-column" rowspan="2">Result</th>
+                                    <th class="table-column main-col" colspan="3">Known</th>
+                                    <th class="table-column main-col" colspan="3">Likely</th>
+                                    <th class="table-column main-col" colspan="3">Potential</th>
+                                    <th class="table-column main-col" colspan="3">Total Validator</th>
+                                </tr>
+                                <tr class="table-header">
+                                    <th class="table-column">A</th>
+                                    <th class="table-column">AA</th>
+                                    <th class="table-column">AAA</th>
+                                    <th class="table-column">A</th>
+                                    <th class="table-column">AA</th>
+                                    <th class="table-column">AAA</th>
+                                    <th class="table-column">A</th>
+                                    <th class="table-column">AA</th>
+                                    <th class="table-column">AAA</th>
+                                    <th class="table-column">A</th>
+                                    <th class="table-column">AA</th>
+                                    <th class="table-column">AAA</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <footer class="footer">
+                <div class="footer-column">
+                    <nav class="footer-nav-links">
+                        <h2 class="contact-title">Pages</h2>
+                        <a href="./list.html">Top 10 sites</a>
+                        <a href="./commonerrors.html">Most Common Errors</a>
+                        <a href="#landingpage">Level Based Errors</a>
+                        <a href="./Waverrors.html">Wave Tool Errors</a>
+                        <a href="./ACheckererrors.html">AChecker Tool Errors</a>
+                        <a href="#">About</a>
+                    </nav>
+                    <nav class="contact-links">
+                        <h2 class="contact-title">Contact</h2>
+                        <a href="mailto:info@example.com">info@example.com</a>
+                        <a href="tel:+1234567890">+1 234 567 890</a>
+                        <a href="https://twitter.com/example" target="_blank">Twitter</a>
+                        <a href="https://linkedin.com/in/example" target="_blank">LinkedIn</a>
+                    </nav>
+                </div>
+                <div class="creator-con">
+                    <a class="footer-title" href="index.html">Accessibility Insights</a>
+                    <a class="creator-name">Developed by Prakash Mariappan</a>
+                </div>
+            </footer>
+        </div>
+    </div>
+</body>
+
+</html>
