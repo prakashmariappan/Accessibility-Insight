@@ -12,88 +12,104 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("levelA").checked = true;
-        fetchExcelData();
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("levelA").checked = true;
+    fetchExcelData();
 
-        
-        // Add event listeners to section titles
-        const sectionTitles = document.querySelectorAll(".section-title");
-        sectionTitles.forEach(title => {
-            title.addEventListener("click", function () {
-                const sectionText = this.nextElementSibling;
+    // Add event listeners to section titles
+    const sectionTitles = document.querySelectorAll(".section-head");
+    sectionTitles.forEach(title => {
+        title.addEventListener("click", function () {
+            const sectionText = this.nextElementSibling;
+            const toggleIcon = this.querySelector(".toggle-icon");
 
-                // Hide all section-text divs
-                document.querySelectorAll(".section-text").forEach(text => {
-                    if (text !== sectionText) {
-                        text.style.display = "none";
-                    }
-                });
-
-                // Toggle the visibility of the clicked section-text div
-                if (sectionText.style.display === "none" || sectionText.style.display === "") {
-                    sectionText.style.display = "block";
-                } else {
-                    sectionText.style.display = "none";
+            // Hide all section-text divs and reset icons
+            document.querySelectorAll(".section-text").forEach(text => {
+                if (text !== sectionText) {
+                    text.style.display = "none";
                 }
             });
+            document.querySelectorAll(".toggle-icon").forEach(icon => {
+                if (icon !== toggleIcon) {
+                    icon.textContent = "+";
+                }
+            });
+
+            // Toggle the visibility of the clicked section-text div and icon
+            if (sectionText.style.display === "none" || sectionText.style.display === "") {
+                sectionText.style.display = "block";
+                toggleIcon.textContent = "-";
+            } else {
+                sectionText.style.display = "none";
+                toggleIcon.textContent = "+";
+            }
         });
-      });
-      
-      function hideAllSectionTexts() {
+    });
+});
+
+function hideAllSectionTexts() {
     document.querySelectorAll(".section-text").forEach(text => {
         text.style.display = "none";
     });
 }
 
-      function fetchExcelData() {
-        hideAllSectionTexts(); // Hide all section-text divs
-        fetch("usdata.xlsx")
-          .then((response) => response.arrayBuffer())
-          .then((data) => {
+function fetchExcelData() {
+    hideAllSectionTexts(); // Hide all section-text divs
+    fetch("usdata.xlsx")
+        .then((response) => response.arrayBuffer())
+        .then((data) => {
             const workbook = XLSX.read(new Uint8Array(data), { type: "array" });
             displayTable(workbook);
-          })
-          .catch((error) => console.error("Error fetching Excel data:", error));
-      }
+        })
+        .catch((error) => console.error("Error fetching Excel data:", error));
+}
 
-      function displayTable(workbook) {
-        const levelA = document.getElementById("levelA").checked;
-        const sheetIndex = levelA ? 4 : 5;
-        const worksheet = workbook.Sheets[workbook.SheetNames[sheetIndex]];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+function displayTable(workbook) {
+    const levelA = document.getElementById("levelA").checked;
+    const sheetIndex = levelA ? 4 : 5;
+    const worksheet = workbook.Sheets[workbook.SheetNames[sheetIndex]];
+    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-        const perceivableErrors = document.getElementById("perceivable-errors");
-        const operableErrors = document.getElementById("operable-errors");
-        const understandableErrors = document.getElementById("understandable-errors");
-        const robustErrors = document.getElementById("robust-errors");
+    const perceivableErrors = document.getElementById("perceivable-errors");
+    const operableErrors = document.getElementById("operable-errors");
+    const understandableErrors = document.getElementById("understandable-errors");
+    const robustErrors = document.getElementById("robust-errors");
 
-        perceivableErrors.innerHTML = "";
-        operableErrors.innerHTML = "";
-        understandableErrors.innerHTML = "";
-        robustErrors.innerHTML = "";
+    perceivableErrors.innerHTML = "";
+    operableErrors.innerHTML = "";
+    understandableErrors.innerHTML = "";
+    robustErrors.innerHTML = "";
 
-        jsonData.forEach((row, index) => {
-          if (index === 0) return; // Skip header row
+    jsonData.forEach((row, index) => {
+        if (index === 0) return; // Skip header row
 
-          const category = row[0]; // Assuming category column is 1
-          const guideline = row[1]; // Assuming guideline column is 0
-          const errorDescription = row[2]; // Assuming description column is 2
+        const category = row[0]; // Assuming category column is 1
+        const guideline = row[1]; // Assuming guideline column is 0
+        const errorDescription = row[2]; // Assuming description column is 2
 
-          const errorItem = document.createElement("div");
-          errorItem.innerText = `Guideline ${guideline}: ${errorDescription}`;
+        const errorItem = document.createElement("div");
+        const guidelineDiv = document.createElement("div");
+        const descriptionDiv = document.createElement("div");
 
-          if (category === 'Perceivable') {
+        guidelineDiv.innerHTML = `<strong>Guideline ${guideline}:</strong>`;
+        descriptionDiv.innerText = errorDescription;
+
+        errorItem.appendChild(guidelineDiv);
+        errorItem.appendChild(descriptionDiv);
+
+        if (category === 'Perceivable') {
             perceivableErrors.appendChild(errorItem);
-          } else if (category === 'Operable') {
+        } else if (category === 'Operable') {
             operableErrors.appendChild(errorItem);
-          } else if (category === 'Understandable') {
+        } else if (category === 'Understandable') {
             understandableErrors.appendChild(errorItem);
-          } else if (category === 'Robust') {
+        } else if (category === 'Robust') {
             robustErrors.appendChild(errorItem);
-          }
-        });
-      }
+        }
+    });
+}
+
+
     </script>
 </head>
 <body>
@@ -133,14 +149,51 @@
                 </label>
               </div>
               <div class="card">
-                <h2 class="section-title">Perceivable</h2>
-                <div id="perceivable-errors" class="section-text" style="display: none;"></div>
-                <h2 class="section-title">Operable</h2>
-                <div id="operable-errors" class="section-text" style="display: none;"></div>
-                <h2 class="section-title">Understandable</h2>
-                <div id="understandable-errors" class="section-text" style="display: none;"></div>
-                <h2 class="section-title robust">Robust</h2>
-                <div id="robust-errors" class="section-text" style="display: none;"></div>
+                <div class="section-con">
+                  <div class="section-head">
+                    <div class="dummy"></div>
+                  <h2 class="section-title">
+                    Perceivable
+                    
+                  </h2>
+                  <span class="toggle-icon">+</span>
+                </div>
+                  <div id="perceivable-errors" class="section-text" style="display: none;"></div>
+                </div>
+                <div class="section-con">
+                  <div class="section-head">
+                    <div class="dummy"></div>
+                    <h2 class="section-title">
+                      Operable
+                      
+                    </h2>
+                    <span class="toggle-icon">+</span>
+                  </div>
+                  <div id="operable-errors" class="section-text" style="display: none;"></div>
+                </div>
+                <div class="section-con">
+                  <div class="section-head">
+                    <div class="dummy"></div>
+                    <h2 class="section-title">
+                      Understandable
+                      
+                    </h2>
+                    <span class="toggle-icon">+</span>
+                  </div>
+                  <div id="understandable-errors" class="section-text" style="display: none;"></div>
+                </div>
+                <div class="section-con">
+                  <div class="section-head">
+                    <div class="dummy"></div>
+                    <h2 class="section-title">
+                      Robust
+                      
+                    </h2>
+                    <span class="toggle-icon">+</span>
+                  </div>
+                  <div id="robust-errors" class="section-text" style="display: none;"></div>
+                </div>
+                
               </div>
             </div>
           </div>
