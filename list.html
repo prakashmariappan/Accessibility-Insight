@@ -9,98 +9,116 @@
     <title>Accessibility Insights</title>
     <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,">
     <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetchExcelData();
+        });
+
+        function fetchExcelData() {
+            fetch("usdata.xlsx")
+                .then((response) => response.arrayBuffer())
+                .then((data) => {
+                    const workbook = XLSX.read(new Uint8Array(data), { type: "array" });
+                    displayTable(workbook);
+                })
+                .catch((error) => console.error("Error fetching Excel data:", error));
+        }
+
+        function displayTable(workbook) {
+            const worksheet = workbook.Sheets[workbook.SheetNames[9]]; // Assuming data is in the first sheet
+            const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+            const tableBody = document.getElementById("tableBody");
+            tableBody.innerHTML = "";
+
+            jsonData.slice(1, 11).forEach((row, index) => { // Slice to get top 10 websites
+                const website = row[0]
+                const websiteText = website.replace(/^https?:\/\//, ''); // Remove https:// or http://
+
+                const rowElement = document.createElement("tr");
+                rowElement.classList.add('table-row');
+                const numberCell = document.createElement("td");
+                numberCell.classList.add('table-column');
+                const websiteCell = document.createElement("td");
+                websiteCell.classList.add('table-column');
+
+                numberCell.textContent = index + 1;
+                websiteCell.innerHTML = `<a class="site-link" href="${website}" target="_blank">${websiteText}</a>`;
+
+                rowElement.appendChild(numberCell);
+                rowElement.appendChild(websiteCell);
+
+                tableBody.appendChild(rowElement);
+            });
+        }
+    </script>
 </head>
 <body>
     <div class="main-container">
         <div class="layout-container">
-          <header class="header">
-            <a class="logo" href="./index.html">
-              <div class="logo-icon">
-              </div>
-              <h2 class="site-title">Accessibility Insights</h2>
-            </a>
-            <nav class="nav-links">
-              <a href="./list.html">Top 10 sites</a>
-              <a href="./commonerrors.html">Most Common Errors</a>
-              <a href="./levelbasederrors.html">Level Based Errors</a>
-              <a href="./Waverrors.html">Wave Tool Errors</a>
-              <a href="./ACheckererrors.html">AChecker Tool Errors</a>
-              <a href="./about.html">About</a>
-            </nav>
-          </header>
+            <header class="header">
+                <a class="logo" href="./index.html">
+                    <div class="logo-icon"></div>
+                    <h2 class="site-title">Accessibility Insights</h2>
+                </a>
+                <nav class="nav-links">
+                    <a href="./list.html">Top 10 sites</a>
+                    <a href="./commonerrors.html">Most Common Errors</a>
+                    <a href="./levelbasederrors.html">Level Based Errors</a>
+                    <a href="./Waverrors.html">Wave Tool Errors</a>
+                    <a href="./ACheckererrors.html">AChecker Tool Errors</a>
+                    <a href="./about.html">About</a>
+                </nav>
+            </header>
             <div class="main-content" id="landingpage">
                 <div class="body-container">
                     <div class="heading-section">
                         <div class="con-text">
-                            <h1 class="intro-title">List of websites</h1>
-                            <p class="intro-subtitle">Showing 1-50 of 200 results</p>
+                            <h1 class="intro-title">Showing List of Top 10 Websites</h1>
+                            <p class="intro-subtitle"></p>
                         </div>
                     </div>
                     <div class="table-container">
-                      <table class="table">
-                          <thead>
-                              <tr class="table-header">
-                                  <th class="table-column">Rank</th>
-                                  <th class="table-column">Website</th>
-                                  <th class="table-column">Score</th>
-                                  <th class="table-column">Issues</th>
-                                  <th class="table-column">Reports</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                              <tr class="table-row">
-                                  <td class="table-column">1</td>
-                                  <td class="table-column">www.acme.com</td>
-                                  <td class="table-column">98</td>
-                                  <td class="table-column">0</td>
-                                  <td class="table-column">2</td>
-                              </tr>
-                              <tr class="table-row">
-                                  <td class="table-column">2</td>
-                                  <td class="table-column">www.dundermifflin.com</td>
-                                  <td class="table-column">97</td>
-                                  <td class="table-column">0</td>
-                                  <td class="table-column">3</td>
-                              </tr>
-                              <tr class="table-row">
-                                  <td class="table-column">3</td>
-                                  <td class="table-column">www.bluthcompany.com</td>
-                                  <td class="table-column">96</td>
-                                  <td class="table-column">0</td>
-                                  <td class="table-column">4</td>
-                              </tr>
-                          </tbody>
-                      </table>
-                  </div>
+                        <table class="table">
+                            <thead>
+                                <tr class="table-header">
+                                    <th class="table-column">No</th>
+                                    <th class="table-column">Website</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <!-- Data will be inserted here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
         <footer class="footer">
-        
-          <div class="footer-column">
-            
-            <nav class="footer-nav-links">
-              <h2 class="contact-title">Pages</h2>
-              <a href="#landingpage">Top 10 sites</a>
-              <a href="./commonerrors.html">Most Common Errors</a>
-              <a href="./levelbasederrors.html">Level Based Errors</a>
-              <a href="./Waverrors.html">Wave Tool Errors</a>
-              <a href="./ACheckererrors.html">AChecker Tool Errors</a>
-              <a href="./about.html">About</a>
-            </nav>
-            
-            <nav class="contact-links">
-              <h2 class="contact-title">Contact</h2>
-              <a href="mailto:info@example.com">info@example.com</a>
-              <a href="tel:+1234567890">+1 234 567 890</a>
-              <a href="https://twitter.com/example" target="_blank">Twitter</a>
-              <a href="https://linkedin.com/in/example" target="_blank">LinkedIn</a>
-            </nav>
-          </div>
-          <div class="creator-con">
-          <a class="footer-title" href="index.html">Accessibility Insights</a>
-          <a class="creator-name">Developed by Prakash Mariappan</a>
-        </div>
+            <div class="footer-column">
+                <nav class="footer-nav-links">
+                    <h2 class="contact-title">Pages</h2>
+                    <a href="#landingpage">Top 10 sites</a>
+                    <a href="./commonerrors.html">Most Common Errors</a>
+                    <a href="./levelbasederrors.html">Level Based Errors</a>
+                    <a href="./Waverrors.html">Wave Tool Errors</a>
+                    <a href="./ACheckererrors.html">AChecker Tool Errors</a>
+                    <a href="./about.html">About</a>
+                </nav>
+                <nav class="contact-links">
+                    <h2 class="contact-title">Contact</h2>
+                    <a href="mailto:info@example.com">info@example.com</a>
+                    <a href="tel:+1234567890">+1 234 567 890</a>
+                    <a href="https://twitter.com/example" target="_blank">Twitter</a>
+                    <a href="https://linkedin.com/in/example" target="_blank">LinkedIn</a>
+                </nav>
+            </div>
+            <div class="creator-con">
+                <a class="footer-title" href="index.html">Accessibility Insights</a>
+                <a class="creator-name">Developed by Prakash Mariappan</a>
+            </div>
         </footer>
     </div>
 </body>

@@ -57,7 +57,7 @@ body {
   }
   
   .site-title {
-    color: #fff;
+    color: #201A09;
     font-size: 1.125rem;
     font-weight: bold;
     margin: 0;
@@ -71,14 +71,14 @@ body {
   }
   
   .nav-links a {
-    color: #fff;
+    color: #201A09;
     font-size: 0.875rem;
     font-weight: 500;
     text-decoration: none;
   }
   .nav-links a:hover{
     text-decoration: underline;
-    color: #201a09;
+    color: #fff;
   }
   .main-content {
     display: flex;
@@ -325,16 +325,28 @@ justify-content: space-between;
   align-items:flex-start;
   flex-direction: column;
   margin: 1.5% auto;
-  width: 96%;
+  width: 100%;
 }
-
-
+.error-item{
+  border-bottom: 1px solid #201a0980;
+}
 .section-text div{
   margin: .5rem; 
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
+  
+}
+.section-text a{
+  text-decoration: none;
+  color: #201A09;
+  font-weight: bold;
+}
+.section-text a:hover{
+  text-decoration: underline;
+  color: #F76902;
+  
 }
 .card {
     display: flex;

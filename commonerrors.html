@@ -86,13 +86,15 @@ function displayTable(workbook) {
         const category = row[0]; // Assuming category column is 1
         const guideline = row[1]; // Assuming guideline column is 0
         const errorDescription = row[2]; // Assuming description column is 2
+        const hyperlink = row[3]; // Assuming hyperlink column is 3
 
         const errorItem = document.createElement("div");
+        errorItem.className = "error-item";
         const guidelineDiv = document.createElement("div");
         const descriptionDiv = document.createElement("div");
 
         guidelineDiv.innerHTML = `<strong>Guideline ${guideline}:</strong>`;
-        descriptionDiv.innerText = errorDescription;
+        descriptionDiv.innerHTML = `<a href="${hyperlink}" target="_blank">${errorDescription}</a>`;
 
         errorItem.appendChild(guidelineDiv);
         errorItem.appendChild(descriptionDiv);
@@ -108,8 +110,6 @@ function displayTable(workbook) {
         }
     });
 }
-
-
     </script>
 </head>
 <body>
