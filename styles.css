@@ -440,7 +440,7 @@ margin-left: 2.5%;
         border-radius: 25px;
         padding: .7rem;
         background-color: #F76902;
-        color: #fff;
+        color: #201A09;
         font-size: 1rem;
         font-weight: bold;
         border-style: none;
@@ -451,7 +451,7 @@ margin-left: 2.5%;
   }
   .read-more:active,.filter-btn:active{
     text-decoration: underline;
-    background-color: #201A09;
+    background-color: #fff;
     color: #F76902;
   }
   .filter-btn{
