@@ -451,8 +451,8 @@ margin-left: 2.5%;
   }
   .read-more:active,.filter-btn:active{
     text-decoration: underline;
-    background-color: #fff;
-    color: #F76902;
+    background-color: #201A09;
+    color: #fff;
   }
   .filter-btn{
     width: 10%;
