@@ -80,35 +80,82 @@ function displayTable(workbook) {
     understandableErrors.innerHTML = "";
     robustErrors.innerHTML = "";
 
-    jsonData.forEach((row, index) => {
-        if (index === 0) return; // Skip header row
+    const headers = ['Guideline', 'Success Criteria', 'Total Errors'];
 
-        const category = row[0]; // Assuming category column is 1
-        const guideline = row[1]; // Assuming guideline column is 0
-        const errorDescription = row[2]; // Assuming description column is 2
-        const hyperlink = row[3]; // Assuming hyperlink column is 3
+    function createTable() {
+        const table = document.createElement("table");
+        table.className = "table";
 
-        const errorItem = document.createElement("div");
-        errorItem.className = "error-item";
-        const guidelineDiv = document.createElement("div");
-        const descriptionDiv = document.createElement("div");
+        const thead = document.createElement("thead");
+        
+        const trHead = document.createElement("tr");
+        trHead.className="table-header";
 
-        guidelineDiv.innerHTML = `<strong>Guideline ${guideline}:</strong>`;
-        descriptionDiv.innerHTML = `<a href="${hyperlink}" target="_blank">${errorDescription}</a>`;
+        headers.forEach(header => {
+            const th = document.createElement("th");
+            th.className="table-column";
+            th.textContent = header;
+            trHead.appendChild(th);
+        });
 
-        errorItem.appendChild(guidelineDiv);
-        errorItem.appendChild(descriptionDiv);
+        thead.appendChild(trHead);
+        table.appendChild(thead);
+
+        const tbody = document.createElement("tbody");
+        table.appendChild(tbody);
+
+        return { table, tbody };
+    }
+
+    const perceivableTable = createTable();
+    const operableTable = createTable();
+    const understandableTable = createTable();
+    const robustTable = createTable();
+
+    jsonData.slice(1).forEach((row) => {
+        const category = row[0]; // Assuming category column is 0
+        const guideline = row[1]; // Assuming guideline column is 1
+        const successCriteria = row[2]; // Assuming success criteria column is 2
+        const totalErrors = row[4]; // Assuming total errors column is 3
+        const hyperlink = row[3]; // Assuming hyperlink column is 4
+
+        const trBody = document.createElement("tr");
+        trBody.classList.add('table-row');
+        const guidelineCell = document.createElement("td");
+        guidelineCell.classList.add('table-column');
+        guidelineCell.classList.add('cl');
+        guidelineCell.textContent = guideline;
+        trBody.appendChild(guidelineCell);
+
+        const successCriteriaCell = document.createElement("td");
+        successCriteriaCell.classList.add('table-column');
+        const link = document.createElement("a");
+        link.href = hyperlink;
+        link.textContent = successCriteria;
+        link.target = "_blank"; // Open link in a new tab
+        successCriteriaCell.appendChild(link);
+        trBody.appendChild(successCriteriaCell);
+
+        const totalErrorsCell = document.createElement("td");
+        totalErrorsCell.classList.add('table-column');
+        totalErrorsCell.textContent = totalErrors;
+        trBody.appendChild(totalErrorsCell);
 
         if (category === 'Perceivable') {
-            perceivableErrors.appendChild(errorItem);
+            perceivableTable.tbody.appendChild(trBody);
         } else if (category === 'Operable') {
-            operableErrors.appendChild(errorItem);
+            operableTable.tbody.appendChild(trBody);
         } else if (category === 'Understandable') {
-            understandableErrors.appendChild(errorItem);
+            understandableTable.tbody.appendChild(trBody);
         } else if (category === 'Robust') {
-            robustErrors.appendChild(errorItem);
+            robustTable.tbody.appendChild(trBody);
         }
     });
+
+    perceivableErrors.appendChild(perceivableTable.table);
+    operableErrors.appendChild(operableTable.table);
+    understandableErrors.appendChild(understandableTable.table);
+    robustErrors.appendChild(robustTable.table);
 }
     </script>
 </head>
@@ -121,7 +168,7 @@ function displayTable(workbook) {
               <h2 class="site-title">Accessibility Insights</h2>
             </a>
             <nav class="nav-links">
-              <a href="./list.html">Top 10 sites</a>
+              <a href="./list.html">Top 20 sites</a>
               <a href="./commonerrors.html">Most Common Errors</a>
               <a href="./levelbasederrors.html">Level Based Errors</a>
               <a href="./Waverrors.html">Wave Tool Errors</a>
@@ -184,7 +231,7 @@ function displayTable(workbook) {
                 </div>
                 <div class="section-con">
                   <div class="section-head">
-                    <div class="dummy"></div>
+                  <div class="dummy"></div>
                     <h2 class="section-title">
                       Robust
                       
@@ -202,7 +249,7 @@ function displayTable(workbook) {
           <div class="footer-column">
             <nav class="footer-nav-links">
               <h2 class="contact-title">Pages</h2>
-              <a href="./list.html">Top 10 sites</a>
+              <a href="./list.html">Top 20 sites</a>
               <a href="#landingpage">Most Common Errors</a>
               <a href="./levelbasederrors.html">Level Based Errors</a>
               <a href="./Waverrors.html">Wave Tool Errors</a>

@@ -33,22 +33,29 @@
             const tableBody = document.getElementById("tableBody");
             tableBody.innerHTML = "";
 
-            jsonData.slice(1, 11).forEach((row, index) => { // Slice to get top 10 websites
-                const website = row[0]
+            jsonData.slice(1, 21).forEach((row, index) => { // Slice to get top 20 websites
+                const website = row[0];
+                const errors = row[1]; 
                 const websiteText = website.replace(/^https?:\/\//, ''); // Remove https:// or http://
 
                 const rowElement = document.createElement("tr");
                 rowElement.classList.add('table-row');
+
                 const numberCell = document.createElement("td");
                 numberCell.classList.add('table-column');
+                numberCell.textContent = index + 1;
+
                 const websiteCell = document.createElement("td");
                 websiteCell.classList.add('table-column');
-
-                numberCell.textContent = index + 1;
                 websiteCell.innerHTML = `<a class="site-link" href="${website}" target="_blank">${websiteText}</a>`;
+
+                const errorsCell = document.createElement("td");
+                errorsCell.classList.add('table-column');
+                errorsCell.textContent = errors;
 
                 rowElement.appendChild(numberCell);
                 rowElement.appendChild(websiteCell);
+                rowElement.appendChild(errorsCell);
 
                 tableBody.appendChild(rowElement);
             });
@@ -64,7 +71,7 @@
                     <h2 class="site-title">Accessibility Insights</h2>
                 </a>
                 <nav class="nav-links">
-                    <a href="./list.html">Top 10 sites</a>
+                    <a href="./list.html">Top 20 sites</a>
                     <a href="./commonerrors.html">Most Common Errors</a>
                     <a href="./levelbasederrors.html">Level Based Errors</a>
                     <a href="./Waverrors.html">Wave Tool Errors</a>
@@ -76,7 +83,7 @@
                 <div class="body-container">
                     <div class="heading-section">
                         <div class="con-text">
-                            <h1 class="intro-title">Showing List of Top 10 Websites</h1>
+                            <h1 class="intro-title">Showing List of Top 20 Websites</h1>
                             <p class="intro-subtitle"></p>
                         </div>
                     </div>
@@ -86,6 +93,7 @@
                                 <tr class="table-header">
                                     <th class="table-column">No</th>
                                     <th class="table-column">Website</th>
+                                    <th class="table-column">Total no of Errors</th>
                                 </tr>
                             </thead>
                             <tbody id="tableBody">
@@ -100,7 +108,7 @@
             <div class="footer-column">
                 <nav class="footer-nav-links">
                     <h2 class="contact-title">Pages</h2>
-                    <a href="#landingpage">Top 10 sites</a>
+                    <a href="#landingpage">Top 20 sites</a>
                     <a href="./commonerrors.html">Most Common Errors</a>
                     <a href="./levelbasederrors.html">Level Based Errors</a>
                     <a href="./Waverrors.html">Wave Tool Errors</a>

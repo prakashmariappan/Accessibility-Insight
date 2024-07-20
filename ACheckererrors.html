@@ -57,7 +57,8 @@
             td.appendChild(a);
           } else if (cellIndex === 6) {
             // Error % column
-            td.innerText = `${parseFloat(cell).toFixed(2)}%`;
+            const value = parseFloat(cell) * 100;
+            td.innerText = `${value.toFixed(2)}%`;
           } else {
             td.innerText = cell;
           }
@@ -121,7 +122,7 @@
           <h2 class="site-title">Accessibility Insights</h2>
         </a>
         <nav class="nav-links">
-          <a href="./list.html">Top 10 sites</a>
+          <a href="./list.html">Top 20 sites</a>
           <a href="./commonerrors.html">Most Common Errors</a>
           <a href="./levelbasederrors.html">Level Based Errors</a>
           <a href="./Waverrors.html">Wave Tool Errors</a>
@@ -214,7 +215,7 @@
       <div class="footer-column">
         <nav class="footer-nav-links">
           <h2 class="contact-title">Pages</h2>
-          <a href="./list.html">Top 10 sites</a>
+          <a href="./list.html">Top 20 sites</a>
           <a href="./commonerrors.html">Most Common Errors</a>
           <a href="./levelbasederrors.html">Level Based Errors</a>
           <a href="./Waverrors.html">Wave Tool Errors</a>
