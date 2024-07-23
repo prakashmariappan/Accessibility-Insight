@@ -18,14 +18,44 @@
         <header class="header">
           <div class="category-nav">
             <nav class="category-links">
-              <a href="#">Library</a>
-              <a href="">University</a>
-              <a href="">Education</a>
-              <a class="active" href="./index.html">E-Government</a>
-              <a href="#">Social Media</a>
+              <div class="dropdown">
+              <button  class="category-link" data-category="library">Library</button>
+              <div class="subcategories" id="library-subcategories">
+                <a href="#">Subcategory</a>
+                <a href="#">Subcategory</a>
+              </div>
+            </div>
+              <div class="dropdown">
+                <button href="#" class="category-link" data-category="university">University</button>
+              <div class="subcategories" id="university-subcategories">
+                <a href="#">Subcategory</a>
+                <a href="#">Subcategory</a>
+              </div>
+            </div>
+              <div class="dropdown">
+                <button href="#" class="category-link" data-category="education">Education</button>
+              <div class="subcategories" id="education-subcategories">
+                <a href="#">Subcategory</a>
+                <a href="#">Subcategory</a>
+              </div>
+            </div>
+              <div class="dropdown">
+              <button class=" category-link" href="#" data-category="e-government">E-Government</button>
+              <div class="subcategories" id="e-government-subcategories">
+                <a href="#" >US E-Government</a>
+                <a href="#">Subcategory</a>
+              </div>
+            </div>
+              <div class="dropdown">
+              <button href="#" class="category-link" data-category="social-media">Social Media</button>
+              <div class="subcategories" id="social-media-subcategories">
+                <a href="#">Subcategory</a>
+                <a href="#">Subcategory</a>
+              </div>
+            </div>
             </nav>
           </div>
-          <div class="logonavcomb">
+          <div class="logonavcomb" id="logonavcomb">
             <a class="logo" href="./index.html">
               <div class="logo-icon"></div>
               <h2 class="site-title">Accessibility Insights</h2>
@@ -40,6 +70,8 @@
             </nav>
           </div>
         </header>
+        
+        
 
         <div class="main-content" id="landingpage">
           <div class="content-container">
@@ -185,11 +217,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+document.querySelectorAll('.subcategories a').forEach((aTag) => {
+    aTag.addEventListener('click', (event) => {
+      document.getElementById('logonavcomb').style.display = 'flex';
+    });
+  });
+
+
       const subcategories = {
         lib: ["Library Subcategory 1", "Library Subcategory 2"],
         uni: ["University Subcategory 1", "University Subcategory 2"],
         edu: ["Education Subcategory 1", "Education Subcategory 2"],
-        egov: ["E-Government Subcategory 1", "E-Government Subcategory 2"],
+        egov: ["US E-Government", "E-Government Subcategory 2"],
         sm: ["Social Media Subcategory 1", "Social Media Subcategory 2"],
       };
 
@@ -212,7 +251,7 @@
               subcategoryContainer.appendChild(subcategoryDiv);
 
               subcategoryDiv.addEventListener("click", () => {
-                if (subcategory === "E-Government Subcategory 1") {
+                if (subcategory === "US E-Government") {
                   loadDataAndDisplayTable(subcategory);
                 } else {
                   document.querySelector(".table-container").style.display =
